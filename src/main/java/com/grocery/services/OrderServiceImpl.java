@@ -1,29 +1,20 @@
 package com.grocery.services;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import com.grocery.daos.SellerDao;
 import com.grocery.daos.OrderDao;
-import com.grocery.daos.OrderItemDao;
 import com.grocery.daos.ProductItemDao;
 import com.grocery.daos.Userdao;
 import com.grocery.dtos.OrderDTO;
-import com.grocery.dtos.OrderDTO1;
 import com.grocery.dtos.OrderItemDTO;
-import com.grocery.dtos.OrderItemDTO1;
 import com.grocery.entities.Order;
 import com.grocery.entities.OrderItem;
 import com.grocery.entities.Product;
@@ -42,8 +33,7 @@ public class OrderServiceImpl implements OrderService {
 	@Autowired
 	private ProductItemDao productDao;
 
-	@Autowired
-	private OrderItemDao orderItemDao;
+
 	
 	@Autowired SellerDao sellerDao;
 
@@ -84,10 +74,7 @@ public class OrderServiceImpl implements OrderService {
 	public List<Order> getOrdersByCustId(int custId) {
 		List<Order> orders = orderDao.findAllByUser(userDao.findById(custId).orElse(null));
 		orders.forEach(System.out::println);
-		if(orders != null)
-			return orders;
-		else 
-			return null;
+		return orders;
 	}
 	
 

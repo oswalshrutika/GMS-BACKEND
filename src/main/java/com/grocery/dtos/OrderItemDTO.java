@@ -1,9 +1,6 @@
 package com.grocery.dtos;
 
-import org.springframework.beans.BeanUtils;
 
-import com.grocery.entities.CartItem;
-import com.grocery.entities.OrderItem;
 
 public class OrderItemDTO {
 	private int quantity;

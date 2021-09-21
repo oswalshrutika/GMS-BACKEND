@@ -1,13 +1,11 @@
 package com.grocery.dtos;
 
-import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.grocery.entities.Category;
 import com.grocery.entities.Product;
-import com.grocery.entities.Seller;
 
 public class ProductImageDto {
 

@@ -5,13 +5,11 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.grocery.custom_exception.AccountHandlingException;
 import com.grocery.daos.Userdao;
-import com.grocery.dtos.UserDto;
 import com.grocery.entities.Cart;
 import com.grocery.entities.Role;
 import com.grocery.entities.User;

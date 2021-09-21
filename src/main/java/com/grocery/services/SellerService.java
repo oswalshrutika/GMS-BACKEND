@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.grocery.entities.Seller;
-import com.grocery.entities.User;
 
 public interface SellerService {
 	Optional<Seller> fetchSellerDetails( Integer sellerId);

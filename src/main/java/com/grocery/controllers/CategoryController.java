@@ -1,11 +1,8 @@
 package com.grocery.controllers;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Stream;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,19 +18,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.grocery.custom_exception.CategoryHandlingException;
 import com.grocery.daos.CategoryDao;
 import com.grocery.dtos.CategoryDto;
 import com.grocery.dtos.CategoryImageDto;
-import com.grocery.dtos.ProductItemDto;
 import com.grocery.entities.Category;
-import com.grocery.entities.Product;
 import com.grocery.services.CategoryService;
 @CrossOrigin
 @RequestMapping("/category")
 @RestController
-public class RestCategoryController {
+public class CategoryController {
 	
-	Logger logger = LoggerFactory.getLogger(RestCategoryController.class);
+	Logger logger = LoggerFactory.getLogger(CategoryController.class);
 
 	@Autowired
 	private CategoryService categoryService;
@@ -47,6 +43,13 @@ public class RestCategoryController {
 		
 		logger.trace("Category controller : findByCategoryId method Accessed");
 		Category newCategory=categoryService.findByCategoryId(categoryId);
+		
+		if(newCategory==null) {
+			logger.error("Category with given id is not found");
+			throw new CategoryHandlingException("Category with given id is not found");
+		}
+			
+		
 		CategoryDto categoryDto = CategoryDto.fromEntity(newCategory);
 		System.out.println("categoryDto :" + categoryDto);
 		return ResponseEntity.ok(categoryDto);
@@ -58,6 +61,12 @@ public class RestCategoryController {
 		
 		logger.trace("Category controller : findByCategoryName method Accessed");
 		Category newCategory = categoryService.findByCategoryName(categoryName);
+		
+		if(newCategory==null) {
+			logger.error("Category with given name is not found");
+			throw new CategoryHandlingException("Category with given name is not found");
+		}
+		
 		CategoryDto categoryDto = CategoryDto.fromEntity(newCategory);
 	return ResponseEntity.ok(categoryDto);
 
@@ -69,6 +78,10 @@ public class RestCategoryController {
 		
 		logger.trace("Category controller : findAllCategory method Accessed");
 		List<Category> categoryList = categoryService.findAll();
+		if(categoryList.isEmpty()) {
+			logger.error("Category list is empty");
+			throw new CategoryHandlingException("Category list is empty");
+		}
 		List<CategoryDto> list = new ArrayList<>();
 		for (Category category : categoryList) {
 			CategoryDto categoryDto = CategoryDto.fromEntity(category);

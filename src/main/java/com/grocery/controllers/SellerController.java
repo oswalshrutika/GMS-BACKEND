@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.grocery.custom_exception.SellerHandlingException;
+import com.grocery.custom_exception.SellerServiceException;
 import com.grocery.entities.Seller;
-import com.grocery.entities.User;
 import com.grocery.services.SellerService;
-import com.grocery.services.UserService;
 @CrossOrigin
 @RestController
 @RequestMapping("/seller")
@@ -38,16 +38,24 @@ public class SellerController {
         	 logger.trace("Seller controller : getSeller method Accessed");
         	 
                  Optional<Seller> seller = sellerService.fetchSellerDetails(sellerId);
-                 if(seller==null)
-                	  return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+                 if(seller==null) {
+                	 logger.error("seller with given id is not exists ");
+            		 throw new SellerHandlingException("seller with given id is not exists ");
+                 }
+                	  //return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
              return ResponseEntity.ok(seller);
         }
-         @PostMapping("/signup")
+         @PostMapping("/signup")  
   	   public ResponseEntity<?> createAccount(@RequestBody Seller seller){
         	 
         	 logger.trace("Seller controller : createAccount method Accessed");
+        	 if(seller==null) {
+        		 logger.error("seller dto requestbody is empty");
+        		 throw new SellerServiceException("seller requestbody is empty");
+        	 }
+        	 
         	 seller.setRole("SELLER");
-        	 System.out.println("seller :"+ seller);
+        	// System.out.println("seller :"+ seller);
   		   return ResponseEntity.ok(sellerService.SignupSellerAccount(seller));
   	   }
          
@@ -57,7 +65,8 @@ public class SellerController {
         	 logger.trace("Seller controller : ValidUser method Accessed");
      		Optional<Seller> validSeller = sellerService.validateSeller(seller.getCompanyEmail(), seller.getPassword());
      		if(validSeller == null)
-     			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+     			throw new SellerHandlingException("Seller Authentication failed");
+     			//return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
      		return ResponseEntity.ok(validSeller);
      	}
          
@@ -78,6 +87,12 @@ public class SellerController {
         	 
         	 logger.trace("Seller controller : updateSellerDetails method Accessed");
       		Seller seller2 = sellerService.findBySellerId(seller.getSellerId());
+      		if(seller2==null) {
+      			logger.error("Seller id does not exists");
+      			throw new SellerServiceException(" Seller id does not exists ");
+      		}
+      			
+      		
       		System.out.println("seller from front end :" + seller);
       		if(seller2!=null) {
       			seller2.setCompanyName(seller.getCompanyName());

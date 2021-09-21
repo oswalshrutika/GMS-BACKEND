@@ -4,18 +4,13 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
-import javax.validation.constraints.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.grocery.custom_exception.AccountHandlingException;
 import com.grocery.daos.SellerDao;
-import com.grocery.daos.Userdao;
-import com.grocery.entities.Role;
 import com.grocery.entities.Seller;
-import com.grocery.daos.SellerdaoRepositary;
-import com.grocery.entities.User;
 
 
 @Service

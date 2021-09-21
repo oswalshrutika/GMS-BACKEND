@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.grocery.custom_exception.UserHandlingException;
 import com.grocery.dtos.CartDto;
 import com.grocery.dtos.CartItemDto;
 import com.grocery.entities.Cart;
@@ -26,10 +27,10 @@ import com.grocery.services.UserService;
 @CrossOrigin
 @RequestMapping("/cart")
 @RestController
-public class RestCartController {
+public class CartController {
 	
 	
-	Logger logger = LoggerFactory.getLogger(RestCartController.class);
+	Logger logger = LoggerFactory.getLogger(CartController.class);
 	
 	@Autowired
 	CartService cartService;
@@ -46,6 +47,11 @@ public class RestCartController {
 		logger.trace("Cart Controller  : getCart method Accessed");
 		
 		User user = uservice.getUser(customerId);
+		if(user==null) {
+			logger.error("Customer id is not exist");
+			throw new UserHandlingException("Customer id not exist");
+		}
+			
 		Cart cart = user.getCart();
 		System.out.println("cart controller : "+cart);
 		return ResponseEntity.ok(CartDto.fromEntity(cart));
@@ -56,7 +62,7 @@ public class RestCartController {
 		
 		logger.trace("Cart Controller  : saveCart method Accessed");
 		Cart cart = new Cart(customerId);
-
+		
 		cart.addItemsInCart(cartItem);
 		cartService.saveCart(cart);
 

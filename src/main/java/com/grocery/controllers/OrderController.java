@@ -5,12 +5,10 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,22 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.grocery.daos.OrderItemDao;
-import com.grocery.daos.ProductItemDao;
-import com.grocery.daos.Userdao;
 import com.grocery.dtos.OrderDTO;
 import com.grocery.dtos.OrderDTO1;
-import com.grocery.dtos.OrderItemDTO;
-import com.grocery.dtos.OrderItemDTO1;
-import com.grocery.dtos.ErrorResponse;
-import com.grocery.dtos.UserDto;
 import com.grocery.entities.Order;
-import com.grocery.entities.OrderItem;
-import com.grocery.entities.Product;
-import com.grocery.entities.User;
 import com.grocery.services.OrderService;
-import com.grocery.services.OrderServiceImpl;
-import com.grocery.services.ProductService;
 
 @CrossOrigin
 @RequestMapping("/orders")
@@ -68,10 +54,12 @@ public class OrderController {
 		for (Order order : orderList) {
 			orderDtoList.add(OrderDTO1.fromEntity(order));
 		}
-		if( orderDtoList != null )
-			return ResponseEntity.ok(orderDtoList);
-		else
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		return ResponseEntity.ok(orderDtoList);
+		
+//		if( orderDtoList != null )
+//			return ResponseEntity.ok(orderDtoList);
+//		else
+//			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
 	}
 	

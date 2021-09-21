@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.grocery.dtos.UserDto;
+import com.grocery.custom_exception.UserHandlingException;
 import com.grocery.entities.User;
 import com.grocery.services.UserService;
 
@@ -32,7 +32,7 @@ public class UserController {
 	}
 	
 	@GetMapping("/{email}/{password}")
-	public ResponseEntity<User> findByEmailAndPassword(@PathVariable String email,@PathVariable String password) {
+	public ResponseEntity<User> findByEmailAndPassword(@PathVariable String email,@PathVariable String password) throws UserHandlingException {
 		
 		 logger.trace("User controller : findByEmailAndPassword method Accessed");
 		User user = uservice.validateUser(email, password);
@@ -42,7 +42,7 @@ public class UserController {
 	}
 	
 	@PostMapping("/authenticate")
-	public ResponseEntity<User> ValidUser(@RequestBody User user) {
+	public ResponseEntity<User> ValidUser(@RequestBody User user)  throws UserHandlingException{
 		
 		logger.trace("User controller : ValidUser method Accessed");
 		User validuser = uservice.validateUser(user.getEmail(), user.getPassword());

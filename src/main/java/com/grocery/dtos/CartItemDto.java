@@ -1,17 +1,10 @@
 package com.grocery.dtos;
 
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+
 
 import org.springframework.beans.BeanUtils;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.grocery.entities.Cart;
 import com.grocery.entities.CartItem;
 
 public class CartItemDto {

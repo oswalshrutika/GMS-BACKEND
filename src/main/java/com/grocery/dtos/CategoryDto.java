@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.grocery.entities.Category;
 import com.grocery.entities.Product;
 

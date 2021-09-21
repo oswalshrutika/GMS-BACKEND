@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.grocery.custom_exception.ProductHandlingException;
 import com.grocery.daos.ProductItemDao;
 import com.grocery.daos.SellerDao;
 
@@ -33,9 +34,9 @@ import com.grocery.services.ProductService;
 @RequestMapping("/products")
 //@RequestMapping("/api")
 @RestController      
-public class RestProductController {    
+public class ProductController {    
 	
-	Logger logger = LoggerFactory.getLogger(RestProductController.class);
+	Logger logger = LoggerFactory.getLogger(ProductController.class);
 
 	@Autowired
 	private ProductService productService;
@@ -57,6 +58,13 @@ public class RestProductController {
 		
 		logger.trace("Product controller : findProductById method Accessed");
 		Product product = productService.findByProductId(id);
+		  
+		if(product==null) {
+			logger.error(" product with given ID is not exists ");
+			throw new ProductHandlingException("product with given ID is not exists");
+		}
+			
+		
 		ProductItemDto productItemDto = ProductItemDto.fromEntity(product);
 		
 		return ResponseEntity.ok(productItemDto);
@@ -68,10 +76,15 @@ public class RestProductController {
 	public ResponseEntity<?> findProductByNameMultiple(@PathVariable("name")String  name) {
 		
 		logger.trace("Product controller : findProductByNameMultiple method Accessed");
-	List<ProductItemDto> productNameList= new ArrayList<>();
+		List<ProductItemDto> productNameList= new ArrayList<>();
 		
 		List<Product> product =productDao.findAllByProductName(name); 
 		System.out.println(product);
+		
+		if(product.isEmpty()) {
+			logger.error(" products with given name are not exists ");
+			throw new ProductHandlingException("products with given name are not exists ");
+		}
 		
 		for (Product product2 : product) {
 			ProductItemDto productItemDto = ProductItemDto.fromEntity(product2);
@@ -89,6 +102,12 @@ public class RestProductController {
 		logger.trace("Product controller : findAllProducts method Accessed");
 		List<ProductItemDto> productNameList= new ArrayList<>();
 		List<Product> productList = productService.findAll();
+		
+		if(productList.isEmpty()) {
+			logger.error(" product list is empty ");
+			throw new ProductHandlingException(" product list is empty");
+		}
+		
 		System.out.println(productList);
 		for (Product product : productList) {
 			ProductItemDto productItemDto = ProductItemDto.fromEntity(product);
@@ -103,6 +122,11 @@ public class RestProductController {
 		
 		logger.trace("Product controller : saveProductByCategoryId method Accessed");
 		Category category = categoryService.findByCategoryId(categoryId);
+		if(category==null) {
+			logger.error(" category with given ID is not exists ");
+			throw new ProductHandlingException("category with given ID is not exists");
+		}
+		
 		p.setCategory(category);
 		Product newProduct = productService.save(p);
 		ProductItemDto productItemDto = ProductItemDto.fromEntity(newProduct);
@@ -114,6 +138,11 @@ public class RestProductController {
 		
 		logger.trace("Product controller : saveProductByCategoryName method Accessed");
 		Category category = categoryService.findByCategoryName(categoryName);
+		
+		if(category==null) {
+			logger.error(" category with given name is not exists ");
+			throw new ProductHandlingException("category with given name is not exists");
+		}
 		p.setCategory(category);
 		Product newProduct = productService.save(p);
 		ProductItemDto productItemDto = ProductItemDto.fromEntity(newProduct);
@@ -127,6 +156,12 @@ public class RestProductController {
 		System.out.println("product/ image before : "+ productDto);
 		int id = productDto.getSellerId();
 		Seller seller2 = sellerDao.findById(id).orElse(null);
+		
+		if(seller2==null) {
+			logger.error(" seller with given id is not exists ");
+			throw new ProductHandlingException("seller with given id is not exists");
+		}
+		
 		Product product = ProductImageDto.toEntity(productDto);
 		product.setSeller(seller2);
 		product=productService.saveWithImage(product, productDto.getProductImage());

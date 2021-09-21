@@ -11,6 +11,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 
 import com.grocery.custom_exception.AccountHandlingException;
+import com.grocery.custom_exception.SellerHandlingException;
+import com.grocery.custom_exception.UserHandlingException;
 import com.grocery.dtos.ErrorResponse;
 
 @ControllerAdvice
@@ -22,27 +24,27 @@ public class GlobalHandler extends ResponseEntityExceptionHandler {
 				HttpStatus.NOT_FOUND);
 	}
 
-//    @Override
-//    @ExceptionHandler(HttpMessageNotReadableException.class)
-//    public ResponseEntity<?> HttpMessageNotReadableException(HttpMessageNotReadableException e) {
-//		System.out.println("in acct handling exc " + e);
-//		return new ResponseEntity<>(new ErrorResponse("Fetching User summary failed ", e.getMessage()),
-//				HttpStatus.NOT_FOUND);
-//	}
-//    
-	// HttpMessageNotReadableException
 
-//    @Override
-//    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request){
-//    	
-//    	return new ResponseEntity<>(new ErrorResponse("RequestBody is empty please add proper fields.", e.getMessage()), HttpStatus.NOT_FOUND);
-//    }
 
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		return new ResponseEntity<>(new ErrorResponse("Requestbody is empty please add proper field ", ex.getMessage()),
 				HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler(SellerHandlingException.class) //can be array of  exception within ({})
+	public ResponseEntity<?> handleSellerHandlingException(SellerHandlingException e) {
+		
+		return new ResponseEntity<>(new ErrorResponse("Seller Authentication Failed", e.getMessage()),
+				HttpStatus.UNAUTHORIZED);
+	}
+	
+	@ExceptionHandler(UserHandlingException.class) //can be array of  exception within ({})
+	public ResponseEntity<?> handleUserHandlingException(UserHandlingException e) {
+		
+		return new ResponseEntity<>(new ErrorResponse("User Authentication Failed", e.getMessage()),
+				HttpStatus.UNAUTHORIZED);
 	}
 
 }

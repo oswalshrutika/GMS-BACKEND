@@ -1,10 +1,7 @@
 package com.grocery.services;
 
 import java.util.List;
-import java.util.Optional;
 
-import com.grocery.dtos.UserDto;
-import com.grocery.entities.Role;
 import com.grocery.entities.User;
 public interface UserService  {
 	User validateUser(String email,String password );
