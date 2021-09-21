@@ -31,8 +31,9 @@ import com.grocery.services.ProductService;
 
 @CrossOrigin
 @RequestMapping("/products")
-@RestController
-public class RestProductController {
+//@RequestMapping("/api")
+@RestController      
+public class RestProductController {    
 	
 	Logger logger = LoggerFactory.getLogger(RestProductController.class);
 
@@ -53,6 +54,7 @@ public class RestProductController {
 	@GetMapping("/id/{id}")
 	public ResponseEntity<?> findProductById(@PathVariable("id")int  id) {
 		//logger.error("inside product controller");   
+		
 		logger.trace("Product controller : findProductById method Accessed");
 		Product product = productService.findByProductId(id);
 		ProductItemDto productItemDto = ProductItemDto.fromEntity(product);
@@ -64,6 +66,7 @@ public class RestProductController {
 	
 	@GetMapping("/name/{name}")
 	public ResponseEntity<?> findProductByNameMultiple(@PathVariable("name")String  name) {
+		
 		logger.trace("Product controller : findProductByNameMultiple method Accessed");
 	List<ProductItemDto> productNameList= new ArrayList<>();
 		
@@ -82,6 +85,7 @@ public class RestProductController {
 	
 	@GetMapping("")
 	public ResponseEntity<?> findAllProducts() {
+		
 		logger.trace("Product controller : findAllProducts method Accessed");
 		List<ProductItemDto> productNameList= new ArrayList<>();
 		List<Product> productList = productService.findAll();
@@ -96,6 +100,7 @@ public class RestProductController {
 	
 	@PostMapping("/id/{categoryId}")
 	public ResponseEntity<?> saveProduct(@RequestBody Product p , @PathVariable("categoryId") int categoryId) {
+		
 		logger.trace("Product controller : saveProductByCategoryId method Accessed");
 		Category category = categoryService.findByCategoryId(categoryId);
 		p.setCategory(category);
@@ -106,6 +111,7 @@ public class RestProductController {
 	
 	@PostMapping("/name/{categoryName}")    
 	public ResponseEntity<?> saveProduct(@RequestBody Product p , @PathVariable("categoryName") String categoryName) {
+		
 		logger.trace("Product controller : saveProductByCategoryName method Accessed");
 		Category category = categoryService.findByCategoryName(categoryName);
 		p.setCategory(category);
@@ -116,6 +122,7 @@ public class RestProductController {
 	
 	@PostMapping("image")
 	public ResponseEntity<?> save(ProductImageDto productDto){
+		
 		logger.trace("Product controller : saveProductWithImage method Accessed");
 		System.out.println("product/ image before : "+ productDto);
 		int id = productDto.getSellerId();
@@ -133,6 +140,7 @@ public class RestProductController {
 	
 	@PutMapping("/id/{id}")
 	public ResponseEntity<?> updateProductById(@RequestBody Product p, @PathVariable("id") int id ) {
+		
 		logger.trace("Product controller : updateProductById method Accessed");
 		p.setProductId(id);
 		Product originalProduct = productService.findByProductId(id);
@@ -152,6 +160,7 @@ public class RestProductController {
 
 	@DeleteMapping("/id/{id}")
 	public void deleteProductById(@PathVariable("id") int id) {
+		
 		logger.trace("Product controller : deleteProductById method Accessed");
 	productDao.deleteById(id);
 	}
@@ -161,6 +170,7 @@ public class RestProductController {
 	
 	@DeleteMapping("/name/{name}")
 	public void deleteProductByName(@PathVariable("name") String name) {
+		
 		logger.trace("Product controller : deleteProductByName method Accessed");
 		List<Product> product = productDao.findAllByProductName(name);
 		for (Product product2 : product) {

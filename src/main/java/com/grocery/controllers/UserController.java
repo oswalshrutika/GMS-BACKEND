@@ -1,5 +1,7 @@
 package com.grocery.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,9 @@ import com.grocery.services.UserService;
 @CrossOrigin
 @RequestMapping("/user")
 public class UserController {
+	
+	 Logger logger = LoggerFactory.getLogger(UserController.class);
+	
 	@Autowired
 	private UserService uservice;
 	public UserController() {
@@ -28,6 +33,8 @@ public class UserController {
 	
 	@GetMapping("/{email}/{password}")
 	public ResponseEntity<User> findByEmailAndPassword(@PathVariable String email,@PathVariable String password) {
+		
+		 logger.trace("User controller : findByEmailAndPassword method Accessed");
 		User user = uservice.validateUser(email, password);
 		if(user == null)
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -36,6 +43,8 @@ public class UserController {
 	
 	@PostMapping("/authenticate")
 	public ResponseEntity<User> ValidUser(@RequestBody User user) {
+		
+		logger.trace("User controller : ValidUser method Accessed");
 		User validuser = uservice.validateUser(user.getEmail(), user.getPassword());
 		if(validuser == null)
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -44,18 +53,24 @@ public class UserController {
 	
 	@PutMapping("/update/{id}") 
 	public ResponseEntity<?> updatePassword(@PathVariable int id, @RequestBody User user) {
+		
+		logger.trace("User controller : updatePassword method Accessed");
 		System.out.println("in update a/c " + user + " " + id);
 		return ResponseEntity.ok(uservice.updateAccount(id, user));
 	}
 	
 	@PutMapping("/edit-profile/{id}")
 	public ResponseEntity<?> updateUserDetails(@PathVariable int id, @RequestBody User user ) {
+		
+		logger.trace("User controller : updateUserDetails method Accessed");
 		System.out.println("in rest : update details " + id + " " + user);
 		return ResponseEntity.ok(uservice.updateUserProfile(id, user));
 	}
 	
 	 @PostMapping("/signup")
 	   public ResponseEntity<?> createAccount(@RequestBody User a){
+		 
+		 logger.trace("User controller : createAccount method Accessed");
 		   return ResponseEntity.ok(uservice.SignupCustomerAccount(a));
 	   }
 	

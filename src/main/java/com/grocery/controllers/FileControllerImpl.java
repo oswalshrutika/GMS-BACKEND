@@ -6,6 +6,8 @@ import java.io.InputStream;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
@@ -19,11 +21,17 @@ import com.grocery.utils.StorageService;
 @CrossOrigin
 @Controller
 public class FileControllerImpl {
+	
+	Logger logger = LoggerFactory.getLogger(FileControllerImpl.class);
+	
 	@Autowired
 	private StorageService storageService;
 
 	@RequestMapping(value="/{fileName}", produces = "image/*")
 	public void download(@PathVariable("fileName") String fileName, HttpServletResponse resp) {
+		
+		logger.trace("File Controller Implementation : download method Accessed");
+		
 		System.out.println("Loading file: " + fileName);
 		Resource resource = storageService.load(fileName);
 		if(resource != null) {

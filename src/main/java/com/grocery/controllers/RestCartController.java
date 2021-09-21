@@ -1,8 +1,9 @@
 package com.grocery.controllers;
 
-import java.util.List;
-import java.util.stream.Stream;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -27,6 +28,9 @@ import com.grocery.services.UserService;
 @RestController
 public class RestCartController {
 	
+	
+	Logger logger = LoggerFactory.getLogger(RestCartController.class);
+	
 	@Autowired
 	CartService cartService;
 	
@@ -39,6 +43,8 @@ public class RestCartController {
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getCart(@PathVariable("id") int customerId) {
 		
+		logger.trace("Cart Controller  : getCart method Accessed");
+		
 		User user = uservice.getUser(customerId);
 		Cart cart = user.getCart();
 		System.out.println("cart controller : "+cart);
@@ -47,6 +53,8 @@ public class RestCartController {
 
 	@PostMapping("/{id}")
 	public ResponseEntity<?> saveCart(@PathVariable("id") int customerId, @RequestBody CartItem cartItem ) {
+		
+		logger.trace("Cart Controller  : saveCart method Accessed");
 		Cart cart = new Cart(customerId);
 
 		cart.addItemsInCart(cartItem);
@@ -58,12 +66,16 @@ public class RestCartController {
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<?> addProductInCart(@PathVariable("id") int customerId, @RequestBody CartItemDto cartItemDto ) {
+		
+		logger.trace("Cart Controller  : addProductInCart method Accessed");
 		Cart cart = cartService.addItemInCart(customerId,cartItemDto);
 		return ResponseEntity.ok(CartDto.fromEntity(cart));
 	}
 	
 	@PutMapping("remove/{id}")
 	public ResponseEntity<?> removeProductInCart(@PathVariable("id") int customerId, @RequestBody CartItemDto cartItemDto ) {
+		
+		logger.trace("Cart Controller  : removeProductInCart method Accessed");
 		Cart cart = cartService.removeItemInCart(customerId,cartItemDto);
 		return ResponseEntity.ok(CartDto.fromEntity(cart));
 	}

@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -30,6 +32,8 @@ import com.grocery.services.CategoryService;
 @RequestMapping("/category")
 @RestController
 public class RestCategoryController {
+	
+	Logger logger = LoggerFactory.getLogger(RestCategoryController.class);
 
 	@Autowired
 	private CategoryService categoryService;
@@ -40,6 +44,8 @@ public class RestCategoryController {
 
 	@GetMapping("/id/{id}")
 	public ResponseEntity<?> findByCategoryId(@PathVariable("id") int categoryId) {
+		
+		logger.trace("Category controller : findByCategoryId method Accessed");
 		Category newCategory=categoryService.findByCategoryId(categoryId);
 		CategoryDto categoryDto = CategoryDto.fromEntity(newCategory);
 		System.out.println("categoryDto :" + categoryDto);
@@ -49,6 +55,8 @@ public class RestCategoryController {
 
 	@GetMapping("/name/{name}")
 	public ResponseEntity<?> findByCategoryName(@PathVariable("name") String categoryName) {
+		
+		logger.trace("Category controller : findByCategoryName method Accessed");
 		Category newCategory = categoryService.findByCategoryName(categoryName);
 		CategoryDto categoryDto = CategoryDto.fromEntity(newCategory);
 	return ResponseEntity.ok(categoryDto);
@@ -58,6 +66,8 @@ public class RestCategoryController {
 
 	@GetMapping("")
 	public ResponseEntity<?> findAllCategory() {
+		
+		logger.trace("Category controller : findAllCategory method Accessed");
 		List<Category> categoryList = categoryService.findAll();
 		List<CategoryDto> list = new ArrayList<>();
 		for (Category category : categoryList) {
@@ -71,6 +81,7 @@ public class RestCategoryController {
 	@PostMapping("")
 	public ResponseEntity<?> saveCategoryWithImage(CategoryImageDto categorydto) {
 		
+		logger.trace("Category controller : saveCategoryWithImage method Accessed");
 		Category category = CategoryImageDto.toEntity(categorydto);
 		category=categoryService.saveWithImage(category, categorydto.getCategoryImage());
 		System.out.println("categoryDto :" + categorydto);
@@ -87,6 +98,7 @@ public class RestCategoryController {
 	@PutMapping("/name/{name}")
 	public ResponseEntity<?> updateCategoryByName(@RequestBody Category c, @PathVariable("name") String name) {
 	
+		logger.trace("Category controller : updateCategoryByName method Accessed");
 		Category category2 = categoryService.findByCategoryName(name);
 		c.setCategoryId(category2.getCategoryId());
 		Category category = categoryService.save(c);
@@ -97,6 +109,8 @@ public class RestCategoryController {
 	
 	@DeleteMapping("/id/{id}")
 	public void deleteCategoryById(@PathVariable("id") int id) {
+		
+		logger.trace("Category controller : deleteCategoryById method Accessed");
 	categoryDao.deleteById(id);
 	
 	}
@@ -104,6 +118,8 @@ public class RestCategoryController {
 
 	@DeleteMapping("/name/{name}")
 	public void deleteCategoryByName(@PathVariable("name") String name) {
+		
+		logger.trace("Category controller : deleteCategoryByName method Accessed");
 		
 		Category category = categoryService.findByCategoryName(name);
 	categoryDao.deleteById(category.getCategoryId());
